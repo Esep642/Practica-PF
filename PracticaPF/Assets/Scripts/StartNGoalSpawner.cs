@@ -50,5 +50,10 @@ public class StartNGoalSpawner : MonoBehaviour
             map.SetTile(new Vector3Int(bounds[1].x, y), Wall);//derecha
         }
         map.SetTile(bounds[1], Wall); //ezquina
+        for (int x = bounds[2].x; x < bounds[3].x; x++)
+        {
+            map.SetTile(new Vector3Int(x, bounds[2].y), Wall);//pared hardcodeada
+          
+        }
     }
 }
