@@ -5,17 +5,22 @@ using UnityEngine.Tilemaps;
 
 public class HeatMap : Pathfinding
 {
+    public PFBenchmark bench;
     public int MaxAlpha;
-    private Queue<Vector3Int> Tiles;
-    private Queue<Color> Heat;
+    private Queue<Vector3Int> TileSequence;
+    private Queue<Color> HeatSequence;
     public Tile tile2;
+    private Dictionary<Vector3Int, int> Tiles;
     // Update is called once per frame
     private void Start()
     {
-        Tiles = new Queue<Vector3Int>();
-        Heat = new Queue<Color>();
+        TileSequence = new Queue<Vector3Int>();
+        HeatSequence = new Queue<Color>();
+        Tiles = new Dictionary<Vector3Int, int>();
         Expand(1, current);
+        Debug.Log("empezo con: " +HeatSequence.Count);
         InvokeRepeating("ShowHeat", timer, timer);
+        
     }
     public override void PathFinding()
     {
@@ -28,37 +33,36 @@ public class HeatMap : Pathfinding
         Vector3Int Left = Pos + new Vector3Int(-1, 0, 0);
         Vector3Int Up = Pos + new Vector3Int(0, 1, 0);
         Vector3Int Down = Pos + new Vector3Int(0, -1, 0);
-        Debug.Log(map.GetColor(Right).a);
-        if (!map.HasTile(Right))//derecha
-        {
+
+        if (!Tiles.ContainsKey(Right))//derecha
+        { 
             findPath(heat, Right);
         }
-        else if ((map.GetColor(Right).a * (float)heat) <MaxAlpha)
+        else if (Tiles[Right] >heat)
         {
-            Debug.Log("right");
-            findPath(heat, Right);
+               findPath(heat, Right);
         }
-        if (!map.HasTile(Left))//izquierda
+        if (!Tiles.ContainsKey(Left))//izquierda
         {
             findPath(heat, Left);
         }
-        else if ((map.GetColor(Left).a * (float)heat) < MaxAlpha)
+        else if (Tiles[Left] > heat)
         {
             findPath(heat, Left);
         }
-        if (!map.HasTile(Up))//arriba
+        if (!Tiles.ContainsKey(Up))//arriba
         {
             findPath(heat, Up);
         }
-        else if ((map.GetColor(Up).a * (float)heat) < MaxAlpha)
+        else if (Tiles[Up] > heat)
         {
             findPath(heat, Up);
         }
-        if (!map.HasTile(Down))//abajo
+        if (!Tiles.ContainsKey(Down))//abajo
         {
             findPath(heat, Down);
         }
-        else if ((map.GetColor(Down).a * (float)heat) < MaxAlpha)
+        else if (Tiles[Down] > heat)
         {
             findPath(heat, Down);
         }
@@ -66,13 +70,20 @@ public class HeatMap : Pathfinding
     private void ShowHeat()
     {
         
-        Vector3Int tile = Tiles.Dequeue();
+        Vector3Int tile = TileSequence.Dequeue();
+        map.RefreshTile(tile);
         map.SetTile(tile, path);
-        map.SetTileFlags(tile, UnityEngine.Tilemaps.TileFlags.None);
-        map.SetColor(tile, Heat.Dequeue());
+        map.SetTileFlags(tile, TileFlags.None);
+        map.SetColor(tile, HeatSequence.Dequeue());
+        bench.UpdateCountdown(TileSequence.Count);
         
-        if (Tiles.Count == 0)
+        if (TileSequence.Count == 0)
+        {
+            Debug.Log("done");
             CancelInvoke("ShowHeat");
+        }
+            
+        
     }
     private void findPath(int heat, Vector3Int pos)
     {
@@ -81,17 +92,15 @@ public class HeatMap : Pathfinding
         {
             Color Peso = path.color;
             Peso.a = MaxAlpha / (float)heat;
-            Debug.Log(Peso.a);
-            Tiles.Enqueue(pos);
-            Heat.Enqueue(Peso);
-            map.SetTile(pos, tile2);
-            map.SetTileFlags(pos, UnityEngine.Tilemaps.TileFlags.None);
-            map.SetColor(pos, Peso);
-            map.RefreshTile(pos);
+            TileSequence.Enqueue(pos);
+            HeatSequence.Enqueue(Peso);
+            Tiles[pos] = heat;
+
+
 
             Expand(heat + 1, pos);
         }
-           
+      
     }
     
 }
