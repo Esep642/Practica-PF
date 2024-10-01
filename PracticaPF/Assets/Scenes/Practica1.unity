@@ -848,8 +848,9 @@ GameObject:
   - component: {fileID: 1889989320}
   - component: {fileID: 1889989321}
   - component: {fileID: 1889989322}
+  - component: {fileID: 1889989323}
   m_Layer: 0
-  m_Name: pf
+  m_Name: PFManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -909,8 +910,32 @@ MonoBehaviour:
   current: {x: 15, y: 1, z: 0}
   timer: 0.0001
   bench: {fileID: 226705153}
-  MaxAlpha: 1
   tile2: {fileID: 11400000, guid: 49bcc1f0412cd7644a3c70121d52a970, type: 2}
+  visualizer: {fileID: 1889989323}
+--- !u!114 &1889989323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889989318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 623bce47c7593d74eb85497f11007875, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  map: {fileID: 872948471}
+  path: {fileID: 11400000, guid: 6e90e1825d776a144b740ef69d4dc005, type: 2}
+  bench: {fileID: 226705153}
+  colours:
+  - {r: 1, g: 0, b: 0, a: 0}
+  - {r: 1, g: 0.80241597, b: 0, a: 0}
+  - {r: 0.55299735, g: 1, b: 0, a: 0}
+  - {r: 0, g: 1, b: 0.6834545, a: 0}
+  - {r: 0, g: 0.3280983, b: 1, a: 0}
+  - {r: 0.4640789, g: 0, b: 1, a: 0}
+  - {r: 1, g: 0, b: 0.84357405, a: 0}
+  timer: 0.0001
 --- !u!1 &2103133701
 GameObject:
   m_ObjectHideFlags: 0

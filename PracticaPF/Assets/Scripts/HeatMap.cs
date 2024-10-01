@@ -6,21 +6,22 @@ using UnityEngine.Tilemaps;
 public class HeatMap : Pathfinding
 {
     public PFBenchmark bench;
-    public int MaxAlpha;
-    private Queue<Vector3Int> TileSequence;
-    private Queue<Color> HeatSequence;
+   // public int MaxAlpha;
+  //  private Queue<Vector3Int> TileSequence;
+    //private Queue<Color> HeatSequence;
     public Tile tile2;
     private Dictionary<Vector3Int, int> Tiles;
-    // Update is called once per frame
+    [SerializeField]
+    private PFVisualizer visualizer;
     private void Start()
     {
-        TileSequence = new Queue<Vector3Int>();
-        HeatSequence = new Queue<Color>();
+      //  TileSequence = new Queue<Vector3Int>();
+        //HeatSequence = new Queue<Color>();
         Tiles = new Dictionary<Vector3Int, int>();
         Expand(1, current);
-        Debug.Log("empezo con: " +HeatSequence.Count);
-        InvokeRepeating("ShowHeat", timer, timer);
-        
+        // Debug.Log("empezo con: " +HeatSequence.Count);
+        //InvokeRepeating("ShowHeat", timer, timer);
+        visualizer.ShowTime();
     }
     public override void PathFinding()
     {
@@ -70,7 +71,7 @@ public class HeatMap : Pathfinding
     private void ShowHeat()
     {
         
-        Vector3Int tile = TileSequence.Dequeue();
+     /*   Vector3Int tile = TileSequence.Dequeue();
         map.RefreshTile(tile);
         map.SetTile(tile, path);
         map.SetTileFlags(tile, TileFlags.None);
@@ -82,23 +83,22 @@ public class HeatMap : Pathfinding
             Debug.Log("done");
             CancelInvoke("ShowHeat");
         }
-            
+            */
         
     }
     private void findPath(int heat, Vector3Int pos)
     {
         if (!bounds.HasTile(pos))
-
         {
-            Color Peso = path.color;
-            Peso.a = MaxAlpha / (float)heat;
-            TileSequence.Enqueue(pos);
-            HeatSequence.Enqueue(Peso);
             Tiles[pos] = heat;
-
-
-
+            visualizer.Add(heat, pos);
             Expand(heat + 1, pos);
+            /* Color Peso = path.color;
+             Peso.a = MaxAlpha / (float)heat;
+             TileSequence.Enqueue(pos);
+             HeatSequence.Enqueue(Peso);
+             
+            */
         }
       
     }
