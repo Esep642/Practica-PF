@@ -38,7 +38,7 @@ public class PFVisualizer : MonoBehaviour
         int heat = heatSequence.Dequeue();
         
         float alpha = 1 - ((float)(heat %10)/ 10);
-        Color col = colours[heat % colours.Length];
+        Color col = colours[(heat / 10)%colours.Length];
         col.a = alpha;
         map.SetColor(tile, col);
 
@@ -53,11 +53,13 @@ public class PFVisualizer : MonoBehaviour
 
     public void ShowTime() //es un nombre de mierda pero no me pude resistir, plz no me juzguen
     {
+        bench.Evaluate();
         InvokeRepeating("ShowHeat", timer, timer);
     }
     public void Add(int heat, Vector3Int pos)
     {
         heatSequence.Enqueue(heat);
         tileSequence.Enqueue(pos);
+        bench.AddCurrent();
     }
 }
