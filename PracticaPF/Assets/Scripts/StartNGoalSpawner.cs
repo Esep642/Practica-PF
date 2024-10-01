@@ -13,17 +13,21 @@ public class StartNGoalSpawner : MonoBehaviour
     private Tile StartT;
     [SerializeField]
     private Tile GoalT;
-    [SerializeField]
-    private Vector3Int[] Coordinates;
+    
+    public Vector3Int[] Coordinates;
     [SerializeField]
     private Tile Wall;
+    [SerializeField]
+    private Vector3Int Limit;
+    
     
     
     // Start is called before the first frame update
     void Start()
     {
-        SetBounds();
-        Spawn(Coordinates[0], Coordinates[1]);
+       // map.GetTilesBlock(new BoundsInt(Coordinates[0], Coordinates[1]));
+       // SetBounds();
+     //   Spawn(Coordinates[0], Coordinates[1]);
     }
 
     // Update is called once per frame
@@ -31,10 +35,38 @@ public class StartNGoalSpawner : MonoBehaviour
     {
         
     }
-    private void Spawn(Vector3Int start, Vector3Int goal)
+    [ContextMenu("spawn")]
+    private void Spawn()
     {
-        map.SetTile(start, StartT);
-        map.SetTile(goal, GoalT);
+        bool spawned = false;
+        while(!spawned)
+        {
+            int x = Random.Range(0, Limit.x);
+            int y = Random.Range(0, Limit.y);
+            Vector3Int pos = new Vector3Int(x, y, 0);
+            if (!map.HasTile(pos))
+            {
+                Coordinates[0] = pos;
+                map.SetTile(pos, StartT);
+                spawned = true;
+            }
+        }
+        spawned = false;
+        while (!spawned)
+        {
+            int x = Random.Range(0, Limit.x);
+            int y = Random.Range(0, Limit.y);
+            Vector3Int pos = new Vector3Int(x, y, 0);
+            if (!map.HasTile(pos))
+            {
+                Coordinates[1] = pos;
+                map.SetTile(pos, GoalT);
+                spawned = true;
+            }
+        }
+
+        //  map.SetTile(Coordinates[0], StartT);
+        //map.SetTile(Coordinates[1], GoalT);
     }
     [ContextMenu ("bounds")]
     private void SetBounds()
@@ -55,5 +87,18 @@ public class StartNGoalSpawner : MonoBehaviour
             map.SetTile(new Vector3Int(x, bounds[2].y), Wall);//pared hardcodeada
           
         }
+    }
+    [ContextMenu("show00")]
+    private void Show00()
+    {
+        map.SetTile(new Vector3Int(0, 0, 0),Wall);
+        map.SetTile(Limit, Wall);
+    }
+    [ContextMenu("reset")]
+    private void GoalReset()
+    {
+        map.SetTile(Coordinates[0], null);
+        map.SetTile(Coordinates[1], null);
+        Spawn();
     }
 }
