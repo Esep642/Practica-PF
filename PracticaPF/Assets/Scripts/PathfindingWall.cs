@@ -9,6 +9,9 @@ public class PathfindingWall : Pathfinding
     // Start is called before the first frame update
     void Start()
     {
+        start = spawner.Coordinates[0];
+        goal = spawner.Coordinates[1];
+        current = start;
         InvokeRepeating("PathFinding", 0.5f, timer);
     }
 
@@ -34,7 +37,7 @@ public class PathfindingWall : Pathfinding
             return;
         }
         if (current.y < goal.y) //arriba
-            Debug.Log("entro arriba");
+            //Debug.Log("entro arriba");
             if (!bounds.HasTile(current + new Vector3Int(0, 1)))
             {
          
@@ -58,6 +61,8 @@ public class PathfindingWall : Pathfinding
             map.SetTile(current, path);
             return;
         }
+        if (current == goal)
+            CancelInvoke("PathFinding");
     }
 }
 

@@ -12,10 +12,16 @@ public class Pathfinding : MonoBehaviour
     public Tilemap bounds;
     public Vector3Int current;
     public float timer;
+    public StartNGoalSpawner spawner;
+    int heat;
 
     // Start is called before the first frame update
     void Start()
     {
+       //Debug.Log("wtf?");
+        start = spawner.Coordinates[0];
+        goal = spawner.Coordinates[1];
+        current = start;
         InvokeRepeating("PathFinding", 0.5f,timer);
     }
 

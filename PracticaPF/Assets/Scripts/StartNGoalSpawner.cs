@@ -10,6 +10,8 @@ public class StartNGoalSpawner : MonoBehaviour
     [SerializeField]
     private Tilemap map;
     [SerializeField]
+    private Tilemap PF;
+    [SerializeField]
     private Tile StartT;
     [SerializeField]
     private Tile GoalT;
@@ -60,7 +62,7 @@ public class StartNGoalSpawner : MonoBehaviour
             if (!map.HasTile(pos))
             {
                 Coordinates[1] = pos;
-                map.SetTile(pos, GoalT);
+                PF.SetTile(pos, GoalT);
                 spawned = true;
             }
         }
@@ -98,7 +100,7 @@ public class StartNGoalSpawner : MonoBehaviour
     private void GoalReset()
     {
         map.SetTile(Coordinates[0], null);
-        map.SetTile(Coordinates[1], null);
+        PF.SetTile(Coordinates[1], null);
         Spawn();
     }
 }
