@@ -8,15 +8,24 @@ public class HeatMap : Pathfinding
     public PFBenchmark bench;
 
     public Tile tile2;
-    private Dictionary<Vector3Int, int> Tiles;
+    public Dictionary<Vector3Int, int> Tiles;
     [SerializeField]
     private PFVisualizer visualizer;
+    public PFIA personaje;
+    public bool BF;
+   
     private void Start()
     {
-
         Tiles = new Dictionary<Vector3Int, int>();
+        current = spawner.Coordinates[0];
+        Tiles[current] = 0;
+
+        
         Expand(1, current);
-   
+        if (personaje!=null)
+        {
+            personaje.startfindingpath();
+        }
         visualizer.ShowTime();
     }
     public override void PathFinding()
@@ -31,6 +40,16 @@ public class HeatMap : Pathfinding
         Vector3Int Up = Pos + new Vector3Int(0, 1, 0);
         Vector3Int Down = Pos + new Vector3Int(0, -1, 0);
 
+       
+        
+        if (!Tiles.ContainsKey(Up))//arriba
+        {
+            findPath(heat, Up);
+        }
+        else if (Tiles[Up] > heat)
+        {
+            findPath(heat, Up);
+        } 
         if (!Tiles.ContainsKey(Right))//derecha
         { 
             findPath(heat, Right);
@@ -39,22 +58,6 @@ public class HeatMap : Pathfinding
         {
                findPath(heat, Right);
         }
-        if (!Tiles.ContainsKey(Left))//izquierda
-        {
-            findPath(heat, Left);
-        }
-        else if (Tiles[Left] > heat)
-        {
-            findPath(heat, Left);
-        }
-        if (!Tiles.ContainsKey(Up))//arriba
-        {
-            findPath(heat, Up);
-        }
-        else if (Tiles[Up] > heat)
-        {
-            findPath(heat, Up);
-        }
         if (!Tiles.ContainsKey(Down))//abajo
         {
             findPath(heat, Down);
@@ -62,6 +65,14 @@ public class HeatMap : Pathfinding
         else if (Tiles[Down] > heat)
         {
             findPath(heat, Down);
+        }
+       if (!Tiles.ContainsKey(Left))//izquierda
+        {
+            findPath(heat, Left);
+        }
+        else if (Tiles[Left] > heat)
+        {
+            findPath(heat, Left);
         }
     }
  
