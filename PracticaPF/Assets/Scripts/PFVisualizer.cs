@@ -37,10 +37,12 @@ public class PFVisualizer : MonoBehaviour
         
         int heat = heatSequence.Dequeue();
         
-        float alpha = 1 - ((float)(heat %10)/ 10);
+        float stage = 1 - ((float)(heat %10)/ 10);
         Color col = colours[(heat / 10)%colours.Length];
-        col.a = alpha;
-        map.SetColor(tile, col);
+        Color nextCol = colours[((heat / 10)+1) % colours.Length];
+        
+        //col.a = alpha;
+        map.SetColor(tile, Degrade(col, nextCol, stage));
 
         bench.UpdateCountdown(tileSequence.Count);
 
@@ -61,5 +63,15 @@ public class PFVisualizer : MonoBehaviour
         heatSequence.Enqueue(heat);
         tileSequence.Enqueue(pos);
         bench.AddCurrent();
+    }
+
+    private Color Degrade(Color current, Color next, float stage)
+    {
+        float Rdiff = current.r - next.r;
+        float Gdiff = current.g - next.g;
+        float Bdiff = current.b - next.b;
+        Debug.Log(stage);
+        Color col = new Color(current.r+(Rdiff*stage), current.g + (Gdiff * stage), current.b + (Bdiff * stage));
+        return col;
     }
 }
